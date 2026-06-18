@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Cache DOM Elements
     const elements = {
+        exportCsvBtn: document.getElementById('export-csv-btn'),
         refreshBtn: document.getElementById('refresh-btn'),
         refreshIcon: document.getElementById('refresh-icon'),
         searchInput: document.getElementById('search-input'),
@@ -45,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event Listeners
     elements.refreshBtn.addEventListener('click', () => fetchReleaseNotes(true));
+    elements.exportCsvBtn.addEventListener('click', exportToCsv);
     elements.searchInput.addEventListener('input', (e) => {
         searchQuery = e.target.value.toLowerCase();
         renderActiveTab();
@@ -241,6 +243,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                                 Share on X
                             </button>
+                            <button class="item-action-btn copy-btn" data-group-index="${groupIndex}" data-item-index="${itemIndex}">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m-2 4h5m-3-3l3 3-3 3"/>
+                                </svg>
+                                Copy
+                            </button>
                             <button class="item-action-btn bookmark-btn" data-group-index="${groupIndex}" data-item-index="${itemIndex}">
                                 <svg width="14" height="14" fill="${isBookmarked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round"/>
@@ -337,6 +345,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                                 Share on X
                             </button>
+                            <button class="item-action-btn copy-btn-bookmark" data-raw-data="${encodeURIComponent(JSON.stringify(bookmark))}">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m-2 4h5m-3-3l3 3-3 3"/>
+                                </svg>
+                                Copy
+                            </button>
                             <button class="item-action-btn remove-bookmark-btn" data-date="${encodeURIComponent(bookmark.date)}" data-index="${bookmark.originalIndex}">
                                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M17 3H7a2 2 0 00-2 2v16l7-3 7 3V5a2 2 0 00-2-2z"/>
@@ -431,6 +445,17 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // Copy to clipboard
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const groupIdx = parseInt(e.currentTarget.getAttribute('data-group-index'));
+                const itemIdx = parseInt(e.currentTarget.getAttribute('data-item-index'));
+                const group = rawReleaseNotes[groupIdx];
+                const item = group.items[itemIdx];
+                copyItemToClipboard(e.currentTarget, item.text);
+            });
+        });
+
         // Bookmark toggle
         document.querySelectorAll('.bookmark-btn').forEach(button => {
             button.addEventListener('click', (e) => {
@@ -456,6 +481,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const rawData = decodeURIComponent(e.currentTarget.getAttribute('data-raw-data'));
                 const bookmark = JSON.parse(rawData);
                 openTweetModal(bookmark);
+            });
+        });
+
+        // Copy to clipboard bookmark
+        document.querySelectorAll('.copy-btn-bookmark').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const rawData = decodeURIComponent(e.currentTarget.getAttribute('data-raw-data'));
+                const bookmark = JSON.parse(rawData);
+                copyItemToClipboard(e.currentTarget, bookmark.item.text);
             });
         });
 
@@ -689,6 +723,71 @@ document.addEventListener('DOMContentLoaded', () => {
             toast.style.transform = 'translateY(10px)';
             setTimeout(() => toast.remove(), 300);
         }, 4000);
+    }
+
+    // Copy item plain text to clipboard
+    function copyItemToClipboard(button, text) {
+        navigator.clipboard.writeText(text).then(() => {
+            const origHTML = button.innerHTML;
+            button.innerHTML = `
+                <svg width="14" height="14" fill="none" stroke="#10b981" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span style="color: #10b981;">Copied!</span>
+            `;
+            button.disabled = true;
+            showToast('Copied release notes to clipboard!', 'success');
+            setTimeout(() => {
+                button.innerHTML = origHTML;
+                button.disabled = false;
+            }, 2000);
+        }).catch(err => {
+            console.error('Clipboard copy failed: ', err);
+            showToast('Failed to copy to clipboard.', 'error');
+        });
+    }
+
+    // Export current filtered release notes to CSV
+    function exportToCsv() {
+        const data = getFilteredData();
+        if (data.length === 0) {
+            showToast('No data available to export.', 'warning');
+            return;
+        }
+
+        let csvContent = '\uFEFFDate,Category,Doc Link,Plain Text Description\n'; // UTF-8 BOM
+        
+        data.forEach(group => {
+            const date = group.date;
+            const link = group.link || '';
+            group.items.forEach(item => {
+                const category = item.type;
+                const text = item.text.replace(/"/g, '""'); // escape double quotes
+                csvContent += `"${date}","${category}","${link}","${text}"\n`;
+            });
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        
+        // Formulate filename based on current filter/search
+        let filename = 'bq_release_notes';
+        if (currentFilter !== 'all') {
+            filename += `_${currentFilter.toLowerCase()}`;
+        }
+        if (searchQuery) {
+            filename += `_search`;
+        }
+        filename += '.csv';
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast(`Successfully exported ${filename}!`, 'success');
     }
 
     // Helper functions
