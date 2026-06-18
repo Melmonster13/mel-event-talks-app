@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cache DOM Elements
     const elements = {
         exportCsvBtn: document.getElementById('export-csv-btn'),
+        themeToggleBtn: document.getElementById('theme-toggle-btn'),
+        themeIconSun: document.getElementById('theme-icon-sun'),
+        themeIconMoon: document.getElementById('theme-icon-moon'),
         refreshBtn: document.getElementById('refresh-btn'),
         refreshIcon: document.getElementById('refresh-icon'),
         searchInput: document.getElementById('search-input'),
@@ -39,6 +42,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize state
     let activeTweetItem = null;
 
+    // Theme Initializer
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    if (currentTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        elements.themeIconSun.style.display = 'none';
+        elements.themeIconMoon.style.display = 'inline-block';
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        elements.themeIconSun.style.display = 'inline-block';
+        elements.themeIconMoon.style.display = 'none';
+    }
+
     // Load data initially
     fetchReleaseNotes(false);
     updateTweetLog();
@@ -47,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Listeners
     elements.refreshBtn.addEventListener('click', () => fetchReleaseNotes(true));
     elements.exportCsvBtn.addEventListener('click', exportToCsv);
+    elements.themeToggleBtn.addEventListener('click', toggleTheme);
     elements.searchInput.addEventListener('input', (e) => {
         searchQuery = e.target.value.toLowerCase();
         renderActiveTab();
@@ -788,6 +804,25 @@ document.addEventListener('DOMContentLoaded', () => {
         link.click();
         document.body.removeChild(link);
         showToast(`Successfully exported ${filename}!`, 'success');
+    }
+
+    function toggleTheme() {
+        const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+        let newTheme = 'dark';
+        if (theme === 'dark') {
+            newTheme = 'light';
+            document.documentElement.setAttribute('data-theme', 'light');
+            elements.themeIconSun.style.display = 'none';
+            elements.themeIconMoon.style.display = 'inline-block';
+            showToast('Switched to Light Mode!', 'info');
+        } else {
+            newTheme = 'dark';
+            document.documentElement.setAttribute('data-theme', 'dark');
+            elements.themeIconSun.style.display = 'inline-block';
+            elements.themeIconMoon.style.display = 'none';
+            showToast('Switched to Dark Mode!', 'info');
+        }
+        localStorage.setItem('theme', newTheme);
     }
 
     // Helper functions

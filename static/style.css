@@ -37,6 +37,115 @@
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+:root[data-theme="light"] {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #f1f5f9;
+    --bg-card: rgba(255, 255, 255, 0.85);
+    --border-color: rgba(15, 23, 42, 0.08);
+    --border-hover: rgba(15, 23, 42, 0.16);
+    
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    
+    --accent-primary: #4f46e5;
+    --accent-primary-glow: rgba(79, 70, 229, 0.15);
+    
+    /* Subtle category badges in light mode */
+    --bg-feature: rgba(56, 189, 248, 0.14);
+    --bg-announcement: rgba(251, 146, 60, 0.14);
+    --bg-issue: rgba(248, 113, 113, 0.14);
+    --bg-default: rgba(192, 132, 252, 0.14);
+}
+
+/* Light Mode Overrides */
+:root[data-theme="light"] .sidebar-title,
+:root[data-theme="light"] .release-date,
+:root[data-theme="light"] .state-title,
+:root[data-theme="light"] .modal-title,
+:root[data-theme="light"] .x-display-name,
+:root[data-theme="light"] .x-preview-link-title {
+    color: var(--text-primary) !important;
+}
+
+:root[data-theme="light"] .logo-text h1 {
+    background: linear-gradient(135deg, #0f172a 60%, #4f46e5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+:root[data-theme="light"] .x-preview-card {
+    background: #ffffff !important;
+    border-color: #e1e8ed !important;
+}
+
+:root[data-theme="light"] .x-preview-body {
+    color: #0f1419 !important;
+}
+
+:root[data-theme="light"] .x-username {
+    color: #536471 !important;
+}
+
+:root[data-theme="light"] .x-preview-link-card {
+    border-color: #e1e8ed !important;
+}
+
+:root[data-theme="light"] .x-preview-link-img {
+    background: #f7f9fa !important;
+    border-bottom-color: #e1e8ed !important;
+}
+
+:root[data-theme="light"] .x-preview-link-domain {
+    color: #536471 !important;
+}
+
+:root[data-theme="light"] .modal-content {
+    background: var(--bg-primary) !important;
+}
+
+:root[data-theme="light"] .tweet-editor-container {
+    background: var(--bg-secondary) !important;
+}
+
+:root[data-theme="light"] .tweet-textarea {
+    color: var(--text-primary) !important;
+}
+
+:root[data-theme="light"] .item-content code {
+    background: rgba(15, 23, 42, 0.05) !important;
+    color: #be185d !important;
+    border-color: rgba(15, 23, 42, 0.03) !important;
+}
+
+:root[data-theme="light"] .tab-btn.active {
+    background: rgba(0, 0, 0, 0.06) !important;
+    color: var(--text-primary) !important;
+}
+
+:root[data-theme="light"] .tab-btn:hover:not(.active) {
+    color: var(--text-primary) !important;
+}
+
+:root[data-theme="light"] .filter-btn:hover {
+    background: rgba(0, 0, 0, 0.02) !important;
+    color: var(--text-primary) !important;
+}
+
+:root[data-theme="light"] .filter-btn.active {
+    background: rgba(0, 0, 0, 0.04) !important;
+    color: var(--text-primary) !important;
+}
+
+:root[data-theme="light"] .badge-count {
+    background: var(--bg-secondary) !important;
+}
+
+:root[data-theme="light"] .item-action-btn:hover {
+    background: rgba(0, 0, 0, 0.04) !important;
+    color: var(--text-primary) !important;
+}
+
 * {
     margin: 0;
     padding: 0;

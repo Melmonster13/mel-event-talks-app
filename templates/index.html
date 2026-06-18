@@ -32,6 +32,16 @@
                     <button class="tab-btn" id="tab-bookmarks">Saved (<span id="bookmarks-badge">0</span>)</button>
                     <button class="tab-btn" id="tab-tweets">Shared Logs (<span id="tweets-badge">0</span>)</button>
                 </nav>
+                <button class="btn btn-secondary theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle light/dark theme" style="padding: 0.65rem 0.85rem;">
+                    <!-- Sun icon shown in dark mode to switch to light -->
+                    <svg id="theme-icon-sun" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m0 13.5V21M4.929 4.929l1.591 1.591m11.962 11.962l1.591 1.591M3.75 12h2.25m13.5 0h2.25M4.929 19.071l1.591-1.591m11.962-11.962l1.591-1.591M12 7.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9z"/>
+                    </svg>
+                    <!-- Moon icon shown in light mode to switch to dark -->
+                    <svg id="theme-icon-moon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display: none;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"/>
+                    </svg>
+                </button>
                 <button class="btn btn-secondary" id="export-csv-btn" aria-label="Export to CSV">
                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
