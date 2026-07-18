@@ -19,13 +19,13 @@ It fetches the live Atom XML feed from Google Cloud, segments bulk updates into 
 
 ## File Directory
 
-* [app.py](file:///Users/melcadd/developer/agy-cli-projects/bq-releases-notes/app.py) — Flask server, endpoint configuration, caching, and XML/HTML parsing logic.
-* [templates/index.html](file:///Users/melcadd/developer/agy-cli-projects/bq-releases-notes/templates/index.html) — Base HTML structure, navigation tabs, filter sidebar, and modal wrapper.
-* [static/style.css](file:///Users/melcadd/developer/agy-cli-projects/bq-releases-notes/static/style.css) — Custom stylesheet providing dark theme palettes, glowing badges, animations, and modals.
-* [static/app.js](file:///Users/melcadd/developer/agy-cli-projects/bq-releases-notes/static/app.js) — DOM controller, search/filter algorithms, modal inputs, character counting, and storage interfaces.
-* [requirements.txt](file:///Users/melcadd/developer/agy-cli-projects/bq-releases-notes/requirements.txt) — Project packages (`Flask`, `requests`, and `beautifulsoup4`).
-* [run.sh](file:///Users/melcadd/developer/agy-cli-projects/bq-releases-notes/run.sh) — Virtual environment automation and server initialization.
-* [.gitignore](file:///Users/melcadd/developer/agy-cli-projects/bq-releases-notes/.gitignore) — Tells Git which temp/compiled folders to ignore.
+* [app.py](app.py) — Flask server, endpoint configuration, caching, and XML/HTML parsing logic.
+* [templates/index.html](templates/index.html) — Base HTML structure, navigation tabs, filter sidebar, and modal wrapper.
+* [static/style.css](static/style.css) — Custom stylesheet providing dark theme palettes, glowing badges, animations, and modals.
+* [static/app.js](static/app.js) — DOM controller, search/filter algorithms, modal inputs, character counting, and storage interfaces.
+* [requirements.txt](requirements.txt) — Project packages (`Flask`, `requests`, and `beautifulsoup4`).
+* [run.sh](run.sh) — Virtual environment automation and server initialization.
+* [.gitignore](.gitignore) — Tells Git which temp/compiled folders to ignore.
 
 ---
 
@@ -56,7 +56,7 @@ To run the application locally on macOS/Linux:
 ## Technical Details
 
 ### Server-Side Segmenter
-Inside [app.py](file:///Users/melcadd/developer/agy-cli-projects/bq-releases-notes/app.py), we download the Atom XML feed. Daily updates can contain multiple release announcements grouped together. We parse this structure utilizing Python's `BeautifulSoup` to look for heading `<h3>` headers. We extract everything between headers to output separate records, providing clean raw HTML and extracted plain-text payloads for the frontend.
+Inside [app.py](app.py), we download the Atom XML feed. Daily updates can contain multiple release announcements grouped together. We parse this structure utilizing Python's `BeautifulSoup` to look for heading `<h3>` headers. We extract everything between headers to output separate records, providing clean raw HTML and extracted plain-text payloads for the frontend.
 
 ### Client-Side State
-The frontend in [app.js](file:///Users/melcadd/developer/agy-cli-projects/bq-releases-notes/static/app.js) tracks the active tab and search filters. All rendering is performed dynamically on the client side using template strings. When saving items or drafting a tweet, the browser's `localStorage` API stores the changes securely on your local device.
+The frontend in [app.js](static/app.js) tracks the active tab and search filters. All rendering is performed dynamically on the client side using template strings. When saving items or drafting a tweet, the browser's `localStorage` API stores the changes securely on your local device.
